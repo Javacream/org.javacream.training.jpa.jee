@@ -1,0 +1,23 @@
+<project name="build reference application" default="deploy" basedir=".">
+	<property name="deployment.name" value="javacream" />
+	<property name="target.dir" value="c:/target" />
+	<property name="deploy.dir" value="c:/_training/tools/wildfly-10.0.0.Final/standalone/deployments" />
+	<target name="clean">
+		<delete dir="${target.dir}" includes="*.*"></delete>
+	</target>
+	<target name="jar" depends="clean">
+		<jar destfile="${target.dir}/${deployment.name}.jar">
+			<zipfileset dir="classes"  />
+		</jar>
+	</target>
+	<target name="war" depends="jar">
+		<jar destfile="${target.dir}/${deployment.name}.war">
+			<zipfileset dir="${target.dir}" includes="${deployment.name}.jar" prefix="WEB-INF/lib" />
+		</jar>
+	</target>
+	<target name="deploy" depends="war">
+		<copy todir="${deploy.dir}">
+			<fileset dir="${target.dir}" includes="${deployment.name}.war"/>
+		</copy>
+	</target>
+</project>
